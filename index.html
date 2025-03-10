@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en" data-ng-app="bingo">
+<head>
+  <title>HPA Bingo</title>
+  <meta charset="utf-8">
+  <meta viewport="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+  <script src="js/bingo.js"></script>
+  <script src="js/items-en.js"></script>
+  <script src="js/items-ru.js"></script>
+</head>
+<body data-ng-controller="bingoController">
+
+  <!-- Language dropdown -->
+  <div class="language-selector">
+    <label for="language">Language:</label>
+    <select id="language" data-ng-model="selectedLanguage" data-ng-change="changeLanguage()">
+      <option value="english">English</option>
+      <option value="russian">Russian</option>
+    </select>
+  </div>
+
+  <!-- Bingo card table -->
+  <table class="card">
+    <tr data-ng-repeat="row in card.rows" data-ng-init="outerIndex=$index;" class="card-row">
+      <td
+        data-ng-repeat="item in row"
+        class="card-item overthrow"
+        data-ng-class="getCellClass(outerIndex, $index)"
+        data-ng-click="handleCellClick(outerIndex, $index)">
+        {{ item }}
+      </td>
+    </tr>
+  </table>
+
+  <!-- Buttons for saving, loading, and generating a new card -->
+  <div class="button-container">
+    <button class="button" data-ng-click="saveLayout()">
+      {{getButtonText('save')}}
+    </button>
+    <button class="button" data-ng-click="loadLayout()">
+      {{getButtonText('load')}}
+    </button>
+    <button class="button" data-ng-click="newCard()">
+      {{getButtonText('newCard')}}
+    </button>
+  </div>
+
+</body>
+</html>

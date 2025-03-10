@@ -1,0 +1,123 @@
+/* General body styling */
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #f5f7fa, #c3cfe2); /* Soft gradient background */
+  display: flex;
+  flex-direction: column; /* Stack elements vertically */
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+}
+
+/* General table styling */
+table.card {
+  position: relative; /* Required for absolute positioning of ::after */
+  border-collapse: collapse;
+  width: 500px;
+  height: 500px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  overflow: hidden;
+  table-layout: fixed;
+}
+
+/* Table cell styling */
+.card-item {
+  width: 100px; /* Fixed width for each cell */
+  height: 100px; /* Fixed height for each cell */
+  padding: 10px;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 0.9em; /* Adjust font size to fit content */
+  border: 1px solid #ddd;
+  background-color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  overflow: hidden; /* Prevents content from resizing the cell */
+}
+
+/* Free space styling */
+.free {
+  background-color: #4CAF50; /* Green background for the "Free" cell */
+  color: white; /* White text for better contrast */
+  font-weight: bold;
+  cursor: default; /* Disable pointer cursor */
+}
+
+/* Hover effect on cells */
+.card-item:hover {
+  background-color: #f1f1f1;
+  transform: scale(1.05); /* Slight zoom effect on hover */
+}
+
+/* Selected cell styling */
+.selected {
+  background-color: #4CAF50 !important; /* Green background for selected cells */
+  color: white;
+  font-weight: bold;
+}
+
+/* Button container styling */
+.button-container {
+  margin-top: 20px; /* Space between the table and buttons */
+  text-align: center;
+}
+
+/* Button styling */
+.button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  background-color: #4CAF50; /* Green background */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #388E3C; /* Darker green on hover */
+}
+
+.button:active {
+  background-color: #2E7D32; /* Even darker green when clicked */
+}
+
+/* Language selector styling */
+.language-selector {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.language-selector label {
+  font-size: 1em;
+  margin-right: 10px;
+}
+
+.language-selector select {
+  padding: 5px 10px;
+  font-size: 1em;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+
+/* Winning cell styling */
+.winning {
+  background-color: #ffe867 !important; /* Gold background for winning cells */
+  color: black;
+  font-weight: bold;
+}
+
+/* Bingo message styling */
+.bingo-message {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 2em;
+  color: #4CAF50;
+}
