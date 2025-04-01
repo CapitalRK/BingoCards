@@ -1,5 +1,5 @@
 # Bingo Cards
-Bingo cards with custom cards
+Bingo cards with custom items
 
 Try: https://capitalrk.github.io/BingoCards/
 
