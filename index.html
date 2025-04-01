@@ -2,6 +2,7 @@
 <html lang="en" data-ng-app="bingo">
 <head>
   <title>HPA Bingo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta charset="utf-8">
   <meta viewport="width=device-width,initial-scale=1">
   <link rel="stylesheet" href="css/style.css" />
@@ -9,43 +10,59 @@
   <script src="js/bingo.js"></script>
   <script src="js/items-en.js"></script>
   <script src="js/items-ru.js"></script>
+  <script src="js/movies-en.js"></script>
 </head>
 <body data-ng-controller="bingoController">
 
-  <!-- Language dropdown -->
-  <div class="language-selector">
-    <label for="language">Language:</label>
-    <select id="language" data-ng-model="selectedLanguage" data-ng-change="changeLanguage()">
-      <option value="english">English</option>
-      <option value="russian">Russian</option>
+  <div class="content-wrapper"></div>
+  <!-- Preset dropdown -->
+  <div class="preset-selector">
+    <label for="preset">Preset:</label>
+    <select id="preset" data-ng-model="selectedPreset" data-ng-change="changePreset()">
+      <option value="english">Anime Cliches [English]</option>
+      <option value="russian">Anime Cliches [Russian]</option>
+      <option value="movies-en">Movie Cliches [English]</option>
+      <option value="custom">Custom</option>
     </select>
   </div>
 
   <!-- Bingo card table -->
-  <table class="card">
-    <tr data-ng-repeat="row in card.rows" data-ng-init="outerIndex=$index;" class="card-row">
-      <td
-        data-ng-repeat="item in row"
-        class="card-item overthrow"
-        data-ng-class="getCellClass(outerIndex, $index)"
-        data-ng-click="handleCellClick(outerIndex, $index)">
-        {{ item }}
-      </td>
-    </tr>
-  </table>
+  <div class="table-container">
+    <table class="card">
+      <tr data-ng-repeat="row in card.rows" data-ng-init="outerIndex=$index;" class="card-row">
+        <td
+          data-ng-repeat="item in row"
+          class="card-item overthrow"
+          data-ng-class="getCellClass(outerIndex, $index)"
+          data-ng-click="handleCellClick(outerIndex, $index)">
+          {{ item }}
+        </td>
+      </tr>
+    </table>
+  </div>  
+
+    <!-- Custom items input (hidden by default) -->
+    <div class="custom-items-container" ng-show="showCustomInput">
+      <textarea 
+        id="customItemsTextarea"
+        class="custom-items-textarea" 
+        data-ng-model="customItemsText" 
+        data-ng-change="updateItemCount()"
+        placeholder="Enter your bingo items (one per line, at least 24 required)"></textarea>
+      <div class="item-counter" ng-show="showCustomInput && customItemCount < 24">
+        Items entered: {{customItemCount}}/24 (need {{24 - customItemCount}} more)
+      </div>
+    </div>
 
   <!-- Buttons for saving, loading, and generating a new card -->
   <div class="button-container">
-    <button class="button" data-ng-click="saveLayout()">
-      {{getButtonText('save')}}
-    </button>
-    <button class="button" data-ng-click="loadLayout()">
-      {{getButtonText('load')}}
-    </button>
-    <button class="button" data-ng-click="newCard()">
-      {{getButtonText('newCard')}}
+    <button class="button" data-ng-click="saveLayout()">Save</button>
+    <button class="button" data-ng-click="toggleCustomInput()">Custom Items</button>
+    <button class="button" data-ng-click="loadLayout()">Load</button>
+    <button class="button" data-ng-click="newCard()" ng-disabled="selectedPreset == 'custom' && customItemCount < 24">
+      New Card
     </button>
   </div>
-
+</div>
 </body>
 </html>
