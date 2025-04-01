@@ -3,7 +3,7 @@ Bingo cards with custom items
 
 Try: https://capitalrk.github.io/BingoCards/
 
-![image](https://github.com/user-attachments/assets/a5bf73d2-4884-410e-8a6a-cdac935669dd)
+![image](https://github.com/user-attachments/assets/3b75092a-b380-49c3-98f2-4006f3a53797)
 
 
 
