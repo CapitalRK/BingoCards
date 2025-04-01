@@ -1,4 +1,4 @@
-# AnimeBingo
+# Bingo Cards
 Bingo cards
 
 Try: https://capitalrk.github.io/bingocards/
