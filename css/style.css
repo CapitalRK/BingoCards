@@ -1,3 +1,10 @@
+.content-wrapper {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto;
+  transition: all 0.3s ease;
+}
+
 /* General body styling */
 body {
   font-family: Arial, sans-serif;
@@ -27,6 +34,12 @@ table.card {
   margin: 0 auto;
 }
 
+/* Ensure card stays above hidden panel */
+.table-container {
+  position: relative;
+  z-index: 1;
+}
+
 @media (max-width: 600px) {
   table.card {
     width: 95vw;
@@ -43,8 +56,8 @@ table.card {
 
 /* Table cell styling */
 .card-item {
-  width: 100px; /* Fixed width for each cell */
-  height: 100px; /* Fixed height for each cell */
+  width: 120px; /* Fixed width for each cell */
+  height: 120px; /* Fixed height for each cell */
   padding: 10px;
   text-align: center;
   vertical-align: middle;
@@ -54,6 +67,11 @@ table.card {
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
   overflow: hidden; /* Prevents content from resizing the cell */
+}
+
+/* Add this to prevent card from moving */
+.card {
+  transition: transform 0.4s ease;
 }
 
 /* Free space styling */
@@ -151,24 +169,44 @@ table.card {
 
 /* Update custom items container */
 .custom-items-container {
-  margin: 10px auto;
-  text-align: center;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  max-width: 500px;
+  position: absolute;
+  right: 0px; /* Start completely hidden behind */
+  top: 50px;
+  width: 340px;
+  height: 420px;
+  background: white;
+  box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+  border-radius: 10px;
+  padding: 20px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 0; /* Behind the card */
+  opacity: 0; /* Start invisible */
+}
+
+.custom-items-container.visible {
+  right: -400px; /* Slide into view */
+  opacity: 1; /* Fade in */
+  z-index: 0; /* Above card when visible */
 }
 
 /* Custom items textarea styling */
 .custom-items-textarea {
-  height: 100px;
-  width: 500px;
-  margin: 0 auto 0;
-  border-radius: 5px;
+  width: 100%;
+  height: 400px;
+  box-sizing: border-box;
+  resize: none;
   border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
   font-family: Arial, sans-serif;
-  resize: vertical;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .custom-items-container {
+    width: 280px;
+    right: -280px;
+  }
 }
 
 /* Item counter styling */
@@ -183,6 +221,12 @@ table.card {
   font-weight: bold;
 }
 
+/* Disabled button style */
+.button.disabled {
+  background-color: #295d61;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
 
 /* Keep the disabled button styling */
 .button[disabled] {
