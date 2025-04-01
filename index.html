@@ -19,7 +19,6 @@
   <div class="content-wrapper">
     <!-- Preset dropdown -->
     <div class="preset-selector">
-      <label for="preset">Preset:</label>
       <select id="preset" data-ng-model="selectedPreset" data-ng-change="changePreset()" 
             data-ng-options="preset.value as preset.name for preset in presets">
       <option value="" style="display:none">Select a preset...</option>
