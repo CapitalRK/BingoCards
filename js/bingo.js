@@ -70,6 +70,20 @@
         }
       };
 
+            // Toggle custom items input
+            $scope.toggleCustomInput = function() {
+              if (!$scope.showCustomInput) {
+                $scope.selectedPreset = 'custom';
+              }
+              $scope.showCustomInput = !$scope.showCustomInput;
+              
+              if ($scope.showCustomInput) {
+                setTimeout(() => {
+                  document.getElementById('customItemsTextarea').focus();
+                }, 400); // Match with CSS transition duration
+              }
+            };
+
       // Change preset
       $scope.changePreset = function() {
         if ($scope.selectedPreset === 'custom') {
@@ -81,15 +95,6 @@
           $scope.showCustomInput = false;
           $scope.newCard();
         }
-      };
-
-      // Toggle custom items input
-      $scope.toggleCustomInput = function() {
-        $scope.selectedPreset = 'custom';
-        $scope.showCustomInput = true;
-        setTimeout(() => {
-          document.getElementById('customItemsTextarea').focus();
-        }, 0);
       };
 
       // Save the current layout to localStorage
