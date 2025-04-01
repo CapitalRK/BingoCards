@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en" data-ng-app="bingo">
 <head>
@@ -16,13 +17,14 @@
 </head>
   
 <body data-ng-controller="bingoController">
+
   <div class="content-wrapper">
     <!-- Preset dropdown -->
     <div class="preset-selector">
       <select id="preset" data-ng-model="selectedPreset" data-ng-change="changePreset()" 
-            data-ng-options="preset.value as preset.name for preset in presets">
-      <option value="" style="display:none">Select a preset...</option>
-      <option value="custom">Custom</option>
+              data-ng-options="preset.value as preset.name for preset in presets">
+        <option value="" style="display:none">Select a preset...</option>
+        <option value="custom">Custom</option>
       </select>
     </div>
 
@@ -41,26 +43,29 @@
       </table>
     </div>
 
-    <!-- Custom items input -->
-    <div class="custom-items-container" ng-show="showCustomInput">
-      <textarea 
-        id="customItemsTextarea"
-        class="custom-items-textarea" 
-        data-ng-model="customItemsText" 
-        data-ng-change="updateItemCount()"
-        placeholder="Enter your bingo items (one per line, at least 24 required)"></textarea>
-      <div class="item-counter" ng-show="showCustomInput && customItemCount < 24">
-        Items entered: {{customItemCount}}/24 (need {{24 - customItemCount}} more)
-      </div>
+    <!-- Custom items panel (now placed before table in HTML) -->
+  <div class="custom-items-container" ng-class="{'visible': showCustomInput}">
+    <textarea 
+      id="customItemsTextarea"
+      class="custom-items-textarea" 
+      data-ng-model="customItemsText" 
+      data-ng-change="updateItemCount()"
+      placeholder="Enter your bingo items (one per line, at least 24 required)"></textarea>
+    <div class="item-counter" ng-show="customItemCount < 24">
+      Items entered: {{customItemCount}}/24 (need {{24 - customItemCount}} more)
     </div>
+  </div>
 
     <!-- Buttons -->
     <div class="button-container">
       <button class="button" data-ng-click="saveLayout()">Save</button>
-      <button class="button" data-ng-click="toggleCustomInput()">Custom Items</button>
-      <button class="button" data-ng-click="loadLayout()">Load</button>
       <button class="button" data-ng-click="newCard()" ng-disabled="selectedPreset == 'custom' && customItemCount < 24">
         New Card
+      </button>
+      <button class="button" data-ng-click="loadLayout()">Load</button>
+      <button class="button" data-ng-click="toggleCustomInput()" 
+              ng-class="{'disabled': showCustomInput}">
+        Custom Items
       </button>
     </div>
   </div>
