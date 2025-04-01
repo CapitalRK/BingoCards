@@ -1,42 +1,42 @@
 (function () {
   'use strict';
-
-  angular.module('bingo', [])
-    .factory('BingoCardService', ['ITEMS_EN', 'ITEMS_RU', 'MOVIES_EN', function (ITEMS_EN, ITEMS_RU, MOVIES_EN) {
-      return {
-        newCard: function (preset, customItems = null) {
-          let items;
-          if (preset === 'custom' && customItems && customItems.length >= 24) {
-            items = customItems.slice(0);
-          } else if (preset === 'russian') {
-            items = ITEMS_RU.slice(0);
-          } else if (preset === 'movies-en') {
-            items = MOVIES_EN.slice(0);
-          } else {
-            items = ITEMS_EN.slice(0);
-          }
-          
-          const card = [];
-
-          for (let i = 0; i < 5; i++) {
-            card[i] = [];
-            for (let j = 0; j < 5; j++) {
-              if (i === 2 && j === 2) {
-                card[i][j] = "Free"; // Center cell is always "Free"
-              } else {
-                const index = Math.floor(Math.random() * items.length);
-                card[i][j] = items.splice(index, 1)[0];
-              }
+  
+  // Create the module first
+  var bingoApp = angular.module('bingo', []);
+  
+  // Then add services and controllers
+  bingoApp.factory('BingoCardService', ['PresetService', function (PresetService) {
+    return {
+      newCard: function (preset, customItems = null) {
+        let items;
+        if (preset === 'custom' && customItems && customItems.length >= 24) {
+          items = customItems.slice(0);
+        } else {
+          items = PresetService.getItems(preset)?.slice(0) || [];
+        }
+        
+        const card = [];
+        for (let i = 0; i < 5; i++) {
+          card[i] = [];
+          for (let j = 0; j < 5; j++) {
+            if (i === 2 && j === 2) {
+              card[i][j] = "Free";
+            } else {
+              const index = Math.floor(Math.random() * items.length);
+              card[i][j] = items.splice(index, 1)[0];
             }
           }
-
-          return card;
         }
-      };
-    }])
-    .controller('bingoController', ['$scope', 'BingoCardService', function ($scope, BingoCardService) {
+        return card;
+      }
+    };
+  }]);
+
+  bingoApp.controller('bingoController', ['$scope', 'BingoCardService', 'PresetService', 
+    function ($scope, BingoCardService, PresetService) {
       // Default state
-      $scope.selectedPreset = 'english';
+      $scope.presets = PresetService.getPresets();
+      $scope.selectedPreset = $scope.presets[0].value;
       $scope.selectedCells = {};
       $scope.winningLines = [];
       $scope.showCustomInput = false;
@@ -63,10 +63,10 @@
             .filter(item => item.length > 0);
         }
         $scope.card = { rows: BingoCardService.newCard($scope.selectedPreset, customItems) };
-        $scope.selectedCells = {}; // Reset selected cells
-        $scope.winningLines = []; // Clear winning lines
+        $scope.selectedCells = {};
+        $scope.winningLines = [];
         if ($scope.selectedPreset !== 'custom') {
-          $scope.showCustomInput = false; // Hide the textarea if not in custom mode
+          $scope.showCustomInput = false;
         }
       };
 
