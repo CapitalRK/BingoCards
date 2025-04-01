@@ -1,8 +1,9 @@
 # Bingo Cards
-Bingo cards
+Bingo cards with custom cards
 
 Try: https://capitalrk.github.io/BingoCards/
 
-![image](https://github.com/user-attachments/assets/665834e2-7019-4fd8-9ef1-b976735c54cb)
+![image](https://github.com/user-attachments/assets/a5bf73d2-4884-410e-8a6a-cdac935669dd)
+
 
 
