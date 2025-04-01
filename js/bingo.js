@@ -1,45 +1,95 @@
 (function () {
   'use strict';
-
-  angular.module('bingo', [])
-    .factory('BingoCardService', ['ITEMS_EN', 'ITEMS_RU', function (ITEMS_EN, ITEMS_RU) {
-      return {
-        newCard: function (language) {
-          const items = language === 'russian' ? ITEMS_RU.slice(0) : ITEMS_EN.slice(0);
-          const card = [];
-
-          for (let i = 0; i < 5; i++) {
-            card[i] = [];
-            for (let j = 0; j < 5; j++) {
-              if (i === 2 && j === 2) {
-                card[i][j] = "Free"; // Center cell is always "Free"
-              } else {
-                const index = Math.floor(Math.random() * items.length);
-                card[i][j] = items.splice(index, 1)[0];
-              }
+  
+  // Create the module first
+  var bingoApp = angular.module('bingo', []);
+  
+  // Then add services and controllers
+  bingoApp.factory('BingoCardService', ['PresetService', function (PresetService) {
+    return {
+      newCard: function (preset, customItems = null) {
+        let items;
+        if (preset === 'custom' && customItems && customItems.length >= 24) {
+          items = customItems.slice(0);
+        } else {
+          items = PresetService.getItems(preset)?.slice(0) || [];
+        }
+        
+        const card = [];
+        for (let i = 0; i < 5; i++) {
+          card[i] = [];
+          for (let j = 0; j < 5; j++) {
+            if (i === 2 && j === 2) {
+              card[i][j] = "Free";
+            } else {
+              const index = Math.floor(Math.random() * items.length);
+              card[i][j] = items.splice(index, 1)[0];
             }
           }
-
-          return card;
         }
-      };
-    }])
-    .controller('bingoController', ['$scope', 'BingoCardService', function ($scope, BingoCardService) {
+        return card;
+      }
+    };
+  }]);
+
+  bingoApp.controller('bingoController', ['$scope', 'BingoCardService', 'PresetService', 
+    function ($scope, BingoCardService, PresetService) {
       // Default state
-      $scope.selectedLanguage = 'english';
+      $scope.presets = PresetService.getPresets();
+      $scope.selectedPreset = $scope.presets[0].value;
       $scope.selectedCells = {};
       $scope.winningLines = [];
+      $scope.showCustomInput = false;
+      $scope.customItemsText = '';
+      $scope.customItemCount = 0;
+
+      // Update item count when custom items change
+      $scope.updateItemCount = function() {
+        if ($scope.customItemsText) {
+          $scope.customItemCount = $scope.customItemsText.split('\n')
+            .map(item => item.trim())
+            .filter(item => item.length > 0).length;
+        } else {
+          $scope.customItemCount = 0;
+        }
+      };
 
       // Generate a new bingo card
       $scope.newCard = function () {
-        $scope.card = { rows: BingoCardService.newCard($scope.selectedLanguage) };
-        $scope.selectedCells = {}; // Reset selected cells
-        $scope.winningLines = []; // Clear winning lines
+        let customItems = null;
+        if ($scope.selectedPreset === 'custom' && $scope.customItemsText) {
+          customItems = $scope.customItemsText.split('\n')
+            .map(item => item.trim())
+            .filter(item => item.length > 0);
+        }
+        $scope.card = { rows: BingoCardService.newCard($scope.selectedPreset, customItems) };
+        $scope.selectedCells = {};
+        $scope.winningLines = [];
+        if ($scope.selectedPreset !== 'custom') {
+          $scope.showCustomInput = false;
+        }
       };
 
-      // Change language and generate a new card
-      $scope.changeLanguage = function () {
-        $scope.newCard();
+      // Change preset
+      $scope.changePreset = function() {
+        if ($scope.selectedPreset === 'custom') {
+          $scope.showCustomInput = true;
+          setTimeout(() => {
+            document.getElementById('customItemsTextarea').focus();
+          }, 0);
+        } else {
+          $scope.showCustomInput = false;
+          $scope.newCard();
+        }
+      };
+
+      // Toggle custom items input
+      $scope.toggleCustomInput = function() {
+        $scope.selectedPreset = 'custom';
+        $scope.showCustomInput = true;
+        setTimeout(() => {
+          document.getElementById('customItemsTextarea').focus();
+        }, 0);
       };
 
       // Save the current layout to localStorage
@@ -47,7 +97,8 @@
         const savedData = {
           card: $scope.card,
           selectedCells: $scope.selectedCells,
-          language: $scope.selectedLanguage
+          preset: $scope.selectedPreset,
+          customItems: $scope.customItemsText
         };
         localStorage.setItem('bingoData', JSON.stringify(savedData));
         alert('Layout saved!');
@@ -60,7 +111,9 @@
           const data = JSON.parse(savedData);
           $scope.card = data.card;
           $scope.selectedCells = data.selectedCells;
-          $scope.selectedLanguage = data.language;
+          $scope.selectedPreset = data.preset || 'english';
+          $scope.customItemsText = data.customItems || '';
+          $scope.showCustomInput = $scope.selectedPreset === 'custom';
           $scope.checkBingo();
         } else {
           alert('No saved layout found.');
@@ -138,15 +191,6 @@
         return $scope.winningLines.some(line =>
           line.cells.some(cell => cell.row === rowIndex && cell.col === colIndex)
         );
-      };
-
-      // Get button text based on selected language
-      $scope.getButtonText = function (buttonType) {
-        const translations = {
-          english: { save: 'Save', load: 'Load', newCard: 'New Card' },
-          russian: { save: 'Сохранить', load: 'Загрузить', newCard: 'Новая Карточка' }
-        };
-        return translations[$scope.selectedLanguage]?.[buttonType] || '';
       };
 
       $scope.newCard();

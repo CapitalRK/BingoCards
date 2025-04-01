@@ -1,51 +1,69 @@
 <!doctype html>
 <html lang="en" data-ng-app="bingo">
 <head>
-  <title>HPA Bingo</title>
+  <title>Bingo Card Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="blockchain" content="none">
   <meta charset="utf-8">
-  <meta viewport="width=device-width,initial-scale=1">
+  <link rel="icon" type="image/png" sizes="32x32" href="image/favicon-32x32.png">
   <link rel="stylesheet" href="css/style.css" />
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
   <script src="js/bingo.js"></script>
-  <script src="js/items-en.js"></script>
-  <script src="js/items-ru.js"></script>
+  <script src="js/anime-en.js"></script>
+  <script src="js/anime-ru.js"></script>
+  <script src="js/movies-en.js"></script>
+  <script src="js/preset.js"></script>
 </head>
+  
 <body data-ng-controller="bingoController">
+  <div class="content-wrapper">
+    <!-- Preset dropdown -->
+    <div class="preset-selector">
+      <label for="preset">Preset:</label>
+      <select id="preset" data-ng-model="selectedPreset" data-ng-change="changePreset()" 
+            data-ng-options="preset.value as preset.name for preset in presets">
+      <option value="" style="display:none">Select a preset...</option>
+      <option value="custom">Custom</option>
+      </select>
+    </div>
 
-  <!-- Language dropdown -->
-  <div class="language-selector">
-    <label for="language">Language:</label>
-    <select id="language" data-ng-model="selectedLanguage" data-ng-change="changeLanguage()">
-      <option value="english">English</option>
-      <option value="russian">Russian</option>
-    </select>
+    <!-- Bingo card table -->
+    <div class="table-container">
+      <table class="card">
+        <tr data-ng-repeat="row in card.rows" data-ng-init="outerIndex=$index;" class="card-row">
+          <td
+            data-ng-repeat="item in row"
+            class="card-item overthrow"
+            data-ng-class="getCellClass(outerIndex, $index)"
+            data-ng-click="handleCellClick(outerIndex, $index)">
+            {{ item }}
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Custom items input -->
+    <div class="custom-items-container" ng-show="showCustomInput">
+      <textarea 
+        id="customItemsTextarea"
+        class="custom-items-textarea" 
+        data-ng-model="customItemsText" 
+        data-ng-change="updateItemCount()"
+        placeholder="Enter your bingo items (one per line, at least 24 required)"></textarea>
+      <div class="item-counter" ng-show="showCustomInput && customItemCount < 24">
+        Items entered: {{customItemCount}}/24 (need {{24 - customItemCount}} more)
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="button-container">
+      <button class="button" data-ng-click="saveLayout()">Save</button>
+      <button class="button" data-ng-click="toggleCustomInput()">Custom Items</button>
+      <button class="button" data-ng-click="loadLayout()">Load</button>
+      <button class="button" data-ng-click="newCard()" ng-disabled="selectedPreset == 'custom' && customItemCount < 24">
+        New Card
+      </button>
+    </div>
   </div>
-
-  <!-- Bingo card table -->
-  <table class="card">
-    <tr data-ng-repeat="row in card.rows" data-ng-init="outerIndex=$index;" class="card-row">
-      <td
-        data-ng-repeat="item in row"
-        class="card-item overthrow"
-        data-ng-class="getCellClass(outerIndex, $index)"
-        data-ng-click="handleCellClick(outerIndex, $index)">
-        {{ item }}
-      </td>
-    </tr>
-  </table>
-
-  <!-- Buttons for saving, loading, and generating a new card -->
-  <div class="button-container">
-    <button class="button" data-ng-click="saveLayout()">
-      {{getButtonText('save')}}
-    </button>
-    <button class="button" data-ng-click="loadLayout()">
-      {{getButtonText('load')}}
-    </button>
-    <button class="button" data-ng-click="newCard()">
-      {{getButtonText('newCard')}}
-    </button>
-  </div>
-
 </body>
 </html>

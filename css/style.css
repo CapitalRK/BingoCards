@@ -1,20 +1,22 @@
 /* General body styling */
 body {
   font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #f5f7fa, #c3cfe2); /* Soft gradient background */
+  background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
   display: flex;
-  flex-direction: column; /* Stack elements vertically */
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
   margin: 0;
-  overflow: hidden;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-y: auto; /* Enable vertical scrolling */
 }
 
 /* General table styling */
 table.card {
-  position: relative; /* Required for absolute positioning of ::after */
+  position: relative;
   border-collapse: collapse;
+  max-width: 100%;
   width: 500px;
   height: 500px;
   background-color: #ffffff;
@@ -22,6 +24,21 @@ table.card {
   border-radius: 15px;
   overflow: hidden;
   table-layout: fixed;
+  margin: 0 auto;
+}
+
+@media (max-width: 600px) {
+  table.card {
+    width: 95vw;
+    height: 95vw;
+  }
+  
+  .card-item {
+    width: auto;
+    height: auto;
+    font-size: 0.7em;
+    padding: 5px;
+  }
 }
 
 /* Table cell styling */
@@ -62,13 +79,18 @@ table.card {
 
 /* Button container styling */
 .button-container {
-  margin-top: 20px; /* Space between the table and buttons */
+  margin: 20px auto;
   text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  max-width: 520px;
 }
 
 /* Button styling */
 .button {
-  margin: 0 10px;
+  margin: 10px;
   padding: 10px 20px;
   background-color: #4CAF50; /* Green background */
   color: white;
@@ -77,6 +99,8 @@ table.card {
   font-size: 1em;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  flex: 1 0 auto;
+  min-width: 120px;
 }
 
 .button:hover {
@@ -87,18 +111,21 @@ table.card {
   background-color: #2E7D32; /* Even darker green when clicked */
 }
 
-/* Language selector styling */
-.language-selector {
-  margin-bottom: 20px;
+/* Preset selector styling */
+.preset-selector {
+  top: 0;
+  padding-bottom: 10px;
+  z-index: 100;
+  width: 100%;
   text-align: center;
 }
 
-.language-selector label {
+.preset-selector label {
   font-size: 1em;
   margin-right: 10px;
 }
 
-.language-selector select {
+.preset-selector select {
   padding: 5px 10px;
   font-size: 1em;
   border-radius: 5px;
@@ -120,4 +147,45 @@ table.card {
   text-align: center;
   font-size: 2em;
   color: #4CAF50;
+}
+
+/* Update custom items container */
+.custom-items-container {
+  margin: 10px auto;
+  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  max-width: 500px;
+}
+
+/* Custom items textarea styling */
+.custom-items-textarea {
+  height: 100px;
+  width: 500px;
+  margin: 0 auto 0;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  font-family: Arial, sans-serif;
+  resize: vertical;
+}
+
+/* Item counter styling */
+.item-counter {
+  font-size: 0.9em;
+  color: #666;
+}
+
+/* Remove or keep this depending on your preference */
+.item-counter.ready {
+  color: #4CAF50;
+  font-weight: bold;
+}
+
+
+/* Keep the disabled button styling */
+.button[disabled] {
+  background-color: #cccccc !important;
+  cursor: not-allowed;
 }

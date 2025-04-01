@@ -1,7 +1,7 @@
 (function () {
     'use strict';
     angular.module('bingo')
-      .constant('ITEMS_RU', [
+      .constant('ANIME_RU', [
         "«Глаза-звезды» (в момент восторга)",
         "«Извращенец»",
         "«Итадакимас!»",
